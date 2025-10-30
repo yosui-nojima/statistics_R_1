@@ -266,7 +266,7 @@ data #結果の表示
 if (1<3) {
   print("Correct") #if文でTRUEだった場合に実行される部分
 } else {
-  print("Incorrect") #if文でTRUEだった場合に実行される部分
+  print("Incorrect") #if文でFALSEだった場合に実行される部分
 }
 ```
 条件文が誤っている場合、```FALSE```と判定され、下記で4行目に指定したコードが実行される。
@@ -274,7 +274,7 @@ if (1<3) {
 if (1>3) {
   print("Correct") #if文でTRUEだった場合に実行される部分
 } else {
-  print("Incorrect") #if文でTRUEだった場合に実行される部分
+  print("Incorrect") #if文でFALSEだった場合に実行される部分
 }
 ```
 if文とfor文を組み合わせて、繰り返し条件文とすることが可能。\
