@@ -312,7 +312,7 @@ install.packages("ggplot2")  #ライブラリのインストール（最初の�
 library(reshape2) #パッケージの読み込み
 library(ggplot2) #パッケージの読み込み
 ```
-## 標準正規分布に従う母集団から任意の標本サイズ（下記の例では、n=3, 4, 8, 32の標本）をm回抽出したときの標本不偏分散と標本分散を確認する
+## 標準正規分布に従う母集団から任意の標本サイズ（下記の例では、n=3, 4, 8, 32の標本）を任意のm回(下記の例では1000回)抽出したときの標本不偏分散と標本分散を確認する
 [e-Stat](https://www.e-stat.go.jp/)は、各府省が公表する統計データを一つにまとめ、統計データの検索をはじめとした、さまざまな機能を備えた政府統計のポータルサイト。\
 このデータベースから、学校保健統計調査（小・中・高の生徒の身長・体重などのデータ）のうち、大阪府17歳男性の身長の平均・標準偏差（令和3年度集計）を[参考](https://www.e-stat.go.jp/stat-search/file-download?statInfId=000032258889&fileKind=0)に仮想データを生成する。
 ### 母集団の生成
@@ -356,15 +356,15 @@ hist(x = num, breaks = 100)
 ```
 data <- matrix(nrow = 1000, ncol = 4) #空の行列を生成
 for (x in 1:1000) { #標本不偏分散を出力 #mの範囲（m==1,2,3,,,1000)を指定
-  data[x,1] <- var(sample(x = num, size = 3*x)) #n=3のときの標本不偏分散を計算
-  data[x,2] <- var(sample(x = num, size = 4*x)) #n=4のときの標本不偏分散を計算
-  data[x,3] <- var(sample(x = num, size = 8*x)) #n=8のときの標本不偏分散を計算
-  data[x,4] <- var(sample(x = num, size = 32*x))  #n=32のときの標本不偏分散を計算
+  data[x,1] <- var(sample(x = popu, size = 3*x)) #n=3のときの標本不偏分散を計算
+  data[x,2] <- var(sample(x = popu, size = 4*x)) #n=4のときの標本不偏分散を計算
+  data[x,3] <- var(sample(x = popu, size = 8*x)) #n=8のときの標本不偏分散を計算
+  data[x,4] <- var(sample(x = popu, size = 32*x)) #n=32のときの標本不偏分散を計算
 }
 colnames(data) <- c("n3", "n4", "n8", "n32") #列名を定義
 data.m <- melt(data) #行列をデータを加工
 colnames(data.m) <- c("M", "n", "S^2") #列名を定義
-ggplot(data.m, aes(x = M, y = `S^2`, color = n)) + geom_line() + ylim(0, 2) +
+ggplot(data.m, aes(x = M, y = `S^2`, color = n)) + geom_line() +
   theme(panel.background = element_blank(), axis.line=element_line(colour = "black"), panel.grid = element_line(colour = "gray")) +
   theme(axis.text.x = element_text(colour = "black", size = 30), axis.title.y = element_text(size = 30, colour = "black"), axis.title.x = element_text(size = 30, colour = "black"), axis.text.y = element_text(size = 30, color = "black"), legend.text = element_text(size = 30, color = "black"), legend.title = element_text(size = 30, color = "black"))
 ```
@@ -372,15 +372,15 @@ ggplot(data.m, aes(x = M, y = `S^2`, color = n)) + geom_line() + ylim(0, 2) +
 ```
 data <- matrix(nrow = 1000, ncol = 4) #1000行✕4列の空の行列を生成
 for (x in 1:1000) { #標本不偏分散を出力 #mの範囲（m==1,2,3,,,1000)を指定
-  data[x,1] <- var(sample(x = num, size = 3*x))*((3-1)/3) #n=3のときの標本分散を計算
-  data[x,2] <- var(sample(x = num, size = 4*x))*((4-1)/4) #n=4のときの標本分散を計算
-  data[x,3] <- var(sample(x = num, size = 8*x))*((8-1)/8) #n=8のときの標本分散を計算
-  data[x,4] <- var(sample(x = num, size = 32*x))*((32-1)/32)  #n=32のときの標本分散を計算
+  data[x,1] <- var(sample(x = popu, size = 3*x))*((3-1)/3) #n=3のときの標本分散を計算
+  data[x,2] <- var(sample(x = popu, size = 4*x))*((4-1)/4) #n=4のときの標本分散を計算
+  data[x,3] <- var(sample(x = popu, size = 8*x))*((8-1)/8) #n=8のときの標本分散を計算
+  data[x,4] <- var(sample(x = popu, size = 32*x))*((32-1)/32) #n=32のときの標本分散を計算
 }
 colnames(data) <- c("n3", "n4", "n8", "n32") #列名を定義
 data.m <- melt(data) #行列をデータを加工
 colnames(data.m) <- c("M", "n", "S'^2") #列名を定義
-ggplot(data.m, aes(x = M, y = `S'^2`, color = n)) + geom_line() + ylim(0, 2) +
+ggplot(data.m, aes(x = M, y = `S'^2`, color = n)) + geom_line() +
   theme(panel.background = element_blank(), axis.line=element_line(colour = "black"), panel.grid = element_line(colour = "gray")) +
   theme(axis.text.x = element_text(colour = "black", size = 30), axis.title.y = element_text(size = 30, colour = "black"), axis.title.x = element_text(size = 30, colour = "black"), axis.text.y = element_text(size = 30, color = "black"), legend.text = element_text(size = 30, color = "black"), legend.title = element_text(size = 30, color = "black"))
 ```
@@ -513,6 +513,19 @@ table(res$include) #TRUE（推定した区間内に母平均が含まれる場�
 
 # レポート課題
 以下の内容についてレポートを作成し、PDFファイルをCLEより提出すること。
+1. [e-Stat](https://www.e-stat.go.jp/)から任意のデータを選択し、N=100000の母集団を生成する。set.seed内の値は学籍番号の下３桁の値を入力すること。（ただし、大阪府17歳男性の身長データは対象外とする。）
+2. 1.で生成した母集団から任意の標本サイズ（下記の例では、n=3, 4, 8, 32の標本）を任意のm回(下記の例では1000回)抽出したときの標本不偏分散と標本分散を確認する。（ただし、n=3, 4, 8, 32、m=1000は対象外とする。）
+3. 2.推定した区間のうち母数が含まれている区間の数と含まれていない区間の数を確認する。
+
+レポートには、e-Statで選択したデータの説明（どういったデータなのか）とそのデータのリンク（URL）、実行したRのコード、実行後の出力結果、実行後に出力された図を含めること。\
+**※提出期限：2025年11月6日 23:59までにCLEから提出**\
+**※ファイル名は「○○○○○○_20251030.pdf」とすること。○○○○○○には各自の学籍番号を入れる。**\
+**※期限を過ぎるとCLEから提出できなくなります。**\
+**※CLE以外からの提出（メール添付など）は認めない。**
+
+<!--
+# レポート課題
+以下の内容についてレポートを作成し、PDFファイルをCLEより提出すること。
 1. [e-Stat](https://www.e-stat.go.jp/)から任意のデータを選択し、N=100000の母集団を生成する。set.seed内の値は学籍番号の下３桁の値を入力すること。（大阪府17歳男性の身長データは対象外とする。）
 2. 1.で生成した母集団から大きさn=100の標本を100回抽出し、抽出した標本それぞれについて信頼係数99%で区間推定する。
 3. 2.推定した区間のうち母数が含まれている区間の数と含まれていない区間の数を確認する。
@@ -522,3 +535,4 @@ table(res$include) #TRUE（推定した区間内に母平均が含まれる場�
 **※ファイル名は「○○○○○○_20251030.pdf」とすること。○○○○○○には各自の学籍番号を入れる。**\
 **※期限を過ぎるとCLEから提出できなくなります。**\
 **※CLE以外からの提出（メール添付など）は認めない。**
+-->
